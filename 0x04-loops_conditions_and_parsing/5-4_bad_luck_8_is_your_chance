@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Bash script to loop from 1 to 10 and display different messages based on the loop iteration.
+# On the 4th iteration, the script displays "bad luck".
+# On the 8th iteration, it displays "good luck".
+# For all other iterations, it displays "Best School".
+
+x=1
+while [ $x -lt 11 ];
+do
+	if [ $x -eq 4 ]
+	then
+		echo bad luck
+	elif [ $x -eq 8 ]
+	then
+		echo good luck
+	else
+		echo Best School
+	fi
+	((x++))
+done
+
