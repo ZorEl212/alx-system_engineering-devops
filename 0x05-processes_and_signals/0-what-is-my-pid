@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
-
 #Fetches it's oun pid
 pgrep "bash"
