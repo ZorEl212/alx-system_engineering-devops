@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+#init for daemon 'manage_my_process'
+
+CMD=$1
+DIR="/var/run/my_process.pid"
+
+function start
+{
+   "$(pwd)"/manage_my_process & true > "$DIR"
+    pgrep -f "manage_my_process" > "$DIR"
+}
+
+function stop
+{
+    kill "$(cat $DIR)"
+    rm "$DIR"
+}
+
+
+if [ "$CMD" = "start" ]
+then
+    start
+    echo "manage_my_process started"
+    exit
+fi
+
+if [ "$CMD" = "stop" ]
+then
+    stop
+    echo "manage_my_process stopped"
+    exit
+fi
+
+if [ "$CMD" = "restart" ]
+then
+    stop
+    start
+    echo  "manage_my_process_restarted"
+    exit
+fi
+
+echo "Usage: manage_my_process {start|stop|restart}"
