@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-#Get pids matching 'bash'
-# shellcheck disable=SC2009
-
-ps axjf | grep -E "bash"

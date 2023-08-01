@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-#daemon process to log "I'm  alive!" to a file
-
-DIR="/tmp/my_process"
-
-while true; do
-    echo "I am alive!" >> "$DIR"
-    sleep 2
-done

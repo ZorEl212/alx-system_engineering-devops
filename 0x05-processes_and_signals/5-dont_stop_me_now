@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-#kill 'to_infinity_and_beyond' process
-
-n="$(pgrep -f 4-to_infinity_and_beyond)"
-kill "$n"

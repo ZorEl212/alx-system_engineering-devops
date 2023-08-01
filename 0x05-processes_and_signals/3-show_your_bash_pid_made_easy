@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-#grep pid for 'bash' with it's name
-
-pgrep -l "bash"
