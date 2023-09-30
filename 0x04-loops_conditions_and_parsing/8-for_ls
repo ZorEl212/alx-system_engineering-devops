@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Loop through files in the current directory and print the modified names
+
+for file in *
+do
+    name="${file#*-}"
+
+    echo "$name"
+done
