@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
+# Gerp it's own pid
+
 pgrep "bash"
