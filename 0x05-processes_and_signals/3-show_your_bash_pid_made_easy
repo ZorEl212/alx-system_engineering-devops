@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Filter processes with word "bash"
+
+pgrep -l "bash"
