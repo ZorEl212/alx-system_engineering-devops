@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Report TCP/IP of listning servers
+
+netstat -pl
