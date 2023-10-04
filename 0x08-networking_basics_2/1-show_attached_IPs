@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Extract active IPv4 addresses on the machine
+
+ip -4 -o addr show | awk -F '[/ ]+' '$3 == "inet" {print $4}'
