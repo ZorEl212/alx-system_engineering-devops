@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#Connect to ssh using a specific rsa key
+
+ssh -i ~/.ssh/school ubuntu@18.233.67.190
