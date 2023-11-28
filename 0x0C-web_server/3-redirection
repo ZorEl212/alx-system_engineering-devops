@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
-# Configures a new ubuntu machine by installing
-# Nginx where it should be listening on port 80
-# Serve a page that would return a Hello World string
-#
-# starting nginx service
-sudo service nginx start
+#Set redirect_me to google permanently
+# Specify the Nginx configuration file
+nginx_conf="/etc/nginx/sites-available/default"
 
-# Give the user ownership to website files for easy editing
-sudo chown -R "$USER":"$USER" /var/www/html
-sudo chmod -R 755 /var/www
+# Define the location block to be added
+new_location="    location /redirect_me {
+        return 301 http://www.google.com;
+    }"
 
-# Backup default index
-cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
+# Check if the location block already exists
+if grep -q "location /redirect_me {" "$nginx_conf"; then
+    echo "Location block already exists. Exiting."
+    exit 1
+fi
 
-echo -e "Hello World!" > /var/www/html/index.nginx-debian.html
+# Use awk to insert the new location block after the 'server {' block
+awk -v new_location="$new_location" '/server {/ {print; print new_location; next}1' "$nginx_conf" > "$nginx_conf.tmp" && mv "$nginx_conf.tmp" "$nginx_conf"
 
-# Setting up /redirect_me to a youtube video
-sudo sed -i '24i\	rewrite ^/redirect_me https://www.google.com permanent;' /etc/nginx/sites-available/default
-
-sudo service nginx restart
+# Restart Nginx
+sudo service nginx restart 
