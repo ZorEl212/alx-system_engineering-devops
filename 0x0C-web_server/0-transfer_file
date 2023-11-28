@@ -10,4 +10,4 @@ IP=$2
 UNAME=$3
 KEY=$4
 
-scp -i "$KEY" "$FILE_PATH" "$UNAME@$IP:~/"
+scp -i "$KEY" -o StrictHostKeyChecking=no "$FILE_PATH" "$UNAME@$IP:~/"
