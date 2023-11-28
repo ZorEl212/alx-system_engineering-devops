@@ -19,5 +19,3 @@ echo -e "Hello World!" > /var/www/html/index.nginx-debian.html
 sudo sed -i '24i\	rewrite ^/redirect_me https://www.google.com permanent;' /etc/nginx/sites-available/default
 
 sudo service nginx restart
-
-echo -e "\n${green}Completed.${reset} ✅\n"
