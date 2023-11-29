@@ -1,24 +1,23 @@
-# Setup New Ubuntu server with nginx
-
-exec { 'update system':
-        command => '/usr/bin/apt-get update',
-}
-
+# Install nginx with puppet
 package { 'nginx':
-	ensure => 'installed',
-	require => Exec['update system']
+  ensure   => '1.18.0',
+  provider => 'apt',
 }
 
-file {'/var/www/html/index.html':
-	content => 'Hello World!'
+file { 'Hello World':
+  path    => '/var/www/html/index.nginx-debian.html',
+  content => 'Hello World',
 }
 
-exec {'redirect_me':
-	command => 'sed -i "24i\	rewrite ^/redirect_me https://google.com 301;" /etc/nginx/sites-available/default',
-	provider => 'shell'
-}
+file_line { 'Hello World':
+  path  => '/etc/nginx/sites-available/default',
+  after => 'server_name _;',
+  line  => '\trewrite ^/redirect_me https://www.google.com 301;',
+  }
 
-service {'nginx':
-	ensure => running,
-	require => Package['nginx']
+exec { 'service':
+  command  => 'service nginx start',
+  provider => 'shell',
+  user     => 'root',
+  path     => '/usr/sbin/service',
 }
