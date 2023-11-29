@@ -1,6 +1,6 @@
 # Install nginx with puppet
 package { 'nginx':
-  ensure   => '1.18.0',
+  ensure   => 'installed',
   provider => 'apt',
 }
 
@@ -9,15 +9,16 @@ file { 'Hello World':
   content => 'Hello World',
 }
 
-file_line { 'Hello World':
-  path  => '/etc/nginx/sites-available/default',
-  after => 'server_name _;',
-  line  => '\trewrite ^/redirect_me https://www.google.com 301;',
-  }
+augeas { 'nginx-rewrite':
+  context => '/files/etc/nginx/sites-available/default',
+  changes => [
+    'set server_name/_[last()+1] redirect_me',
+    'set server_name/_[last()]/rewrite ^/redirect_me https://www.google.com 301',
+  ],
+  onlyif  => 'match server_name/_[last()] size == 0',
+}
 
-exec { 'service':
-  command  => 'service nginx start',
-  provider => 'shell',
-  user     => 'root',
-  path     => '/usr/sbin/service',
+service { 'nginx':
+  ensure  => 'running',
+  enable  => true,
 }
