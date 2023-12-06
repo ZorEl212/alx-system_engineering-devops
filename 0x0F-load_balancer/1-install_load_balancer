@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# install load balancer
+
+function install() {
+	command -v "$1" &> /dev/null
+
+	#shellcheck disable=SC2181
+		sudo apt-get update -y -qq && \
+		sudo apt-get install -y "$1" -qq
+}
+
+install haproxy #install haproxy
+# backup default server config file
+sudo cp /etc/haproxy/haproxy.cfg haproxy_default.backup
+
+server_config=\
+"
+defaults
+  mode http
+  timeout client 15s
+  timeout connect 10s
+  timeout server 15s
+  timeout http-request 10s
+
+frontend yeab-tech-frontend
+    bind *:80
+    default_backend yeab-tech-backend
+
+backend yeab-tech-backend
+    balance roundrobin
+    server 453-web-01 35.243.128.200:80 check
+    server 453-web-02 3.239.120.96:80 check
+"
+
+# shellcheck disable=SC2154
+echo "$server_config" | sudo dd status=none of=/etc/haproxy/haproxy.cfg
+
+# enable haproxy to be started by init script
+echo "ENABLED=1" | sudo dd status=none of=/etc/default/haproxy
+sudo service haproxy start
