@@ -5,8 +5,10 @@ function install() {
 	command -v "$1" &> /dev/null
 
 	#shellcheck disable=SC2181
-		sudo apt-get update -y -qq && \
-		sudo apt-get install -y "$1" -qq
+	apt-get -y install software-properties-common -qq
+	add-apt-repository -y ppa:vbernat/haproxy-2.0 -qq
+	sudo apt-get update -y -qq && \
+	    apt-get -y install "$1"=2.0.\* -qq
 }
 
 install haproxy #install haproxy
