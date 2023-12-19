@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Login to a user and exec whoami
+
+username="$1"
+
+su - "$username" -c "whoami"
