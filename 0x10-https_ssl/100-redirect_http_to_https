@@ -9,19 +9,19 @@ frontend yeab-tech-frontend
     bind *:80
     bind *:443 ssl crt /etc/haproxy/ssl/www.yeab.tech.pem crt /etc/haproxy/ssl/yeab.tech.pem
     mode http
-    http-request set-header X-Forwarded-Proto https
     acl is_lb_01 hdr(host) -i lb-01.yeab.tech
     # Redirect lb-01.yeab.tech to yeab.tech
     redirect location https://yeab.tech code 301 if is_lb_01
+    #redirect location https://www.yeab.tech code 301 if is_yeab_tech
     acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+    redirect scheme https if !{ ssl_fc }
     use_backend letsencrypt-backend if letsencrypt-acl
     default_backend yeab-tech-backend
 
 backend yeab-tech-backend
     balance roundrobin
-    redirect scheme https code 301 if !{ ssl_fc }
-    server 228311-web-01 18.233.67.190:80 check
-    server 228311-web-02 18.233.67.111:80 check
+        server 228311-web-01 54.227.128.98:80 check
+        server 228311-web-02 54.209.26.126:80 check
 
 backend letsencrypt-backend
         server letsencrypt 127.0.0.1:54321
