@@ -1,43 +1,35 @@
 #!/usr/bin/python3
-'''
-Python script that, using this REST API, for a given employee ID
-'''
+"""Get employee information using restful api"""
 import requests
 from sys import argv
 
 
-def get_user_info(user_id):
-    url = "https://jsonplaceholder.typicode.com/"
-    user_response = requests.get(f"{url}users/{user_id}")
+def emp_status(emp_id):
+    res = requests.get("https://jsonplaceholder.typicode.com/todos").json()
+    emp = requests.get(f"https://jsonplaceholder.typicode.com/users/{emp_id}").json()
 
-    user_info = user_response.json()
-    return user_info
+    emp_tasks = ()
+    tasks = []
+    emp_name = emp['name']
+    for item in res:
+            if item['userId'] == int(emp_id):
+                tasks.append(item)
+
+    for task in tasks:
+        if task['completed'] == True:
+            emp_tasks += (task['title'],)
+
+    print(f"Employee {emp_name} is done with tasks"
+        f"({len(emp_tasks)}/{len(tasks)}):")
 
 
-def get_completed_tasks(user_id):
-    url = "https://jsonplaceholder.typicode.com/"
-    tasks_response = requests.get(f"{url}todos?userId={user_id}")
+    for t in emp_tasks:
+        print(f"\t {t}")
 
-    tasks = tasks_response.json()
-    completed_tasks = [task for task in tasks if task.get("completed")]
-    values = [tasks, completed_tasks]
-    return values
-
-
-if __name__ == "__main__":
-    if len(argv) > 1:
-        user_id = argv[1]
-        user_info = get_user_info(user_id)
-
-        name = user_info.get("name")
-
-        if name is not None:
-            values = get_completed_tasks(user_id)
-            comp_tasks = values[0]
-            all_tasks_count = len(values[1])
-
-            print(f"Employee {name} is done with tasks "
-                  f"({all_tasks_count}/{len(comp_tasks)}):")
-
-            for task in comp_tasks:
-                print(f"\t {task.get('title')}")
+if __name__ == '__main__':
+    if len(argv) < 2:
+        print("Please input employee id")
+        exit()
+    emp_status(argv[1])
+    
+    
