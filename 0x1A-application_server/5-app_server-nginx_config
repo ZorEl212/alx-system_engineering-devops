@@ -1,0 +1,21 @@
+server {
+    listen 80;
+    server_name server_domain_or_IP;
+    location / {
+    proxy_pass http://0.0.0.0:5003/2-hbnb/;
+  }
+    location /static {
+      proxy_pass http://0.0.0.0:5003;
+  }
+    location /airbnb-onepage/ {
+      #The proxy settings.
+      proxy_pass http://0.0.0.0:5000/airbnb-onepage/;
+  }
+    location /airbnb-dynamic/ {
+    rewrite ^/airbnb-dynamic/(.*) /$1 break;
+    proxy_pass http://0.0.0.0:5001/;
+  }
+    location /api/ {
+    proxy_pass http://0.0.0.0:5002/api/;
+  }
+}
